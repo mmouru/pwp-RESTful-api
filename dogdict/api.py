@@ -31,9 +31,9 @@ api = Api(api_bp)
 
 api.add_resource(GroupCollection, "/groups/")
 api.add_resource(BreedCollection, "/breeds/")
-api.add_resource(FactCollection, "/facts/")
-api.add_resource(CharacteristicCollection, "/characteristics/")
+api.add_resource(FactCollection, "/<group:group>/<breed:breed>/facts/")
+api.add_resource(CharacteristicCollection, "/<group:group>/<breed:breed>/characteristics/")
 
 api.add_resource(GroupItem, "/groups/<group:group>/")
 api.add_resource(BreedItem, "/breeds/<breed:breed>/")
-api.add_resource(FactItem, "/facts/<fact:fact>/")
+api.add_resource(FactItem, "/<group:group>/<breed:breed>/facts/<fact:fact>/")
