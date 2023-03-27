@@ -8,7 +8,7 @@ from flask import Response, request, url_for
 from werkzeug.exceptions import Conflict, BadRequest, UnsupportedMediaType
 from sqlalchemy.exc import IntegrityError
 from flask_restful import Resource
-from dogdict.models import Group, db
+from dogdict.models import Group, Breed, db
 from dogdict.constants import JSON
 
 
@@ -22,7 +22,7 @@ class GroupCollection(Resource):
         """
         body = {"items": []}
         for db_group in Group.query.all():
-            item = db_group.serialize()
+            item = db_group.serialize(short_form=False)
             body["items"].append(item)
 
         return Response(json.dumps(body), 200, mimetype=JSON)
@@ -63,11 +63,15 @@ class GroupItem(Resource):
         """
             GETs a specific groups information from the DB (name only)
         """
-        group = Group.query.filter_by(name=group.name).first()
+        
         body = {
-            "name": group.name
-        }
-        print(group.name)
+            "group": group.name,
+            "breeds": []
+            }
+        # Get all breeds that are under group
+        for breed in Breed.query.filter_by(group=group).all():
+            body["breeds"].append(breed.name)
+
         return Response(json.dumps(body), 200, mimetype=JSON)
 
     def put(self, group):
@@ -82,7 +86,6 @@ class GroupItem(Resource):
         except ValidationError as exc:
             raise BadRequest(description=str(exc)) from exc
 
-        group = Group.query.filter_by(name=group.name).first()
         group.deserialize(request.json)
 
         db.session.add(group)

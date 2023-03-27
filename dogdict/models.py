@@ -21,13 +21,21 @@ class Group(db.Model):
     # creates a connection from Group -> Breed
     breeds = db.relationship("Breed", back_populates="group")
 
-    def serialize(self):
+    def serialize(self, short_form=True):
         """
             Used to serialize the Group Python model objects,
             since they can't directly be serialized with json.dumps
         """
-        return {"name": self.name, "id": self.id}
+        if short_form:
+            return {"name": self.name, "id": self.id}
+        
+        breeds_amount = Breed.query.filter_by(group=self).count()
 
+        return {
+            "name": self.name,
+            "breeds_in_db": breeds_amount,
+            "id": self.id
+        }
     def deserialize(self, doc):
         """
             Used to deserialize the a dictionary into a suitable model instance.
@@ -73,11 +81,17 @@ class Characteristics(db.Model):
     # creates a connection between characteristics and breed
     in_breed = db.relationship("Breed", back_populates="characteristics")
 
-    def serialize(self):
+    def serialize(self, short_form=False):
         """
             Used to serialize the Characteristics Python model objects,
             since they can't directly be serialized with json.dumps
         """
+        if short_form:
+            return {
+                "coat_length": self.coat_length,
+                "life_span": self.life_span,
+                "exercise": self.exercise,
+            }
         return {
             "breed": [breed.name for breed in self.in_breed],
             "char_id": self.id,
@@ -86,12 +100,14 @@ class Characteristics(db.Model):
             "exercise": self.exercise,
         }
 
-    def deserialize(self, characteristic):
+    def deserialize(self, doc):
         """
-            Used to deserialize the Characteristics objects to get specific
-            characteristics from the DB (currently not required)
+            Used to deserialize the doc object to assign
+            new values to char
         """
-        self.char = Characteristics.query.filter_by(name=characteristic["char_id"]).first()
+        self.life_span = doc["life_span"]
+        self.coat_length = doc["coat_length"]
+        self.exercise = doc["exercise"]
 
 
     @staticmethod
@@ -107,7 +123,20 @@ class Characteristics(db.Model):
         }
         props["life_span"] = {"description": "Lifespan of a breed", "type": "number"}
         return schema
+    
+    @staticmethod
+    def json_schema_for_put():
+        """
+            Defines different schema where in_breed is not needed for PUT method,
+            but all others are
+        """
+        schema = {"type": "object", "required": ["coat_length", "life_span", "exercise"]}
+        props = schema["properties"] = {}
+        props["life_span"] = {"description": "Lifespan of a breed", "type": "number"}
+        props["exercise"] = {"description": "Exercise needs of dog in scale 0-1", "type": "number"}
+        props["coat_length"] = {"description": "Breeds coat length in scale 0-1", "type": "number"}
 
+        return schema
 
 class Facts(db.Model):
     """
@@ -121,20 +150,20 @@ class Facts(db.Model):
     breed_id = db.Column(db.Integer, db.ForeignKey("breed.id", ondelete="CASCADE"))
     breed = db.relationship("Breed", back_populates="facts")
 
-    def serialize(self):
+    def serialize(self, short_form=False):
         """
             Used to serialize the Facts Python model objects,
             since they can't directly be serialized with json.dumps
         """
+        if short_form:
+            return {"fact": self.fact, "fact_id": self.id}
         return {"fact": self.fact, "breed": self.breed_id, "id": self.id}
 
     def deserialize(self, doc):
         """
-            Used to deserialize the Facts object and extract the wanted data
-            Returns one specific fact currently
+            Change fact from given body
         """
         self.fact = doc["fact"]
-        self.fact = Facts.query.filter_by(fact=doc["fact"]).first()
 
 
     @staticmethod
@@ -146,6 +175,16 @@ class Facts(db.Model):
         props = schema["properties"] = {}
         props["fact"] = {"description": "Fact about a breed", "type": "string"}
         props["breed"] = {"description": "Breed regarding the fact", "type": "string"}
+        return schema
+    
+    @staticmethod
+    def json_schema_for_put():
+        """
+            defines the JSON format for the Facts object for PUT method, breed is not needed
+        """
+        schema = {"type": "object", "required": ["fact"]}
+        props = schema["properties"] = {}
+        props["fact"] = {"description": "Fact about a breed", "type": "string"}
         return schema
 
 

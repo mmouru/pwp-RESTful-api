@@ -34,6 +34,6 @@ api.add_resource(BreedCollection, "/breeds/")
 api.add_resource(FactCollection, "/<group:group>/<breed:breed>/facts/")
 api.add_resource(CharacteristicCollection, "/<group:group>/<breed:breed>/characteristics/")
 
-api.add_resource(GroupItem, "/groups/<group:group>/")
-api.add_resource(BreedItem, "/breeds/<breed:breed>/")
+api.add_resource(GroupItem, "/<group:group>/")
+api.add_resource(BreedItem, "/<group:group>/<breed:breed>/")
 api.add_resource(FactItem, "/<group:group>/<breed:breed>/facts/<fact:fact>/")

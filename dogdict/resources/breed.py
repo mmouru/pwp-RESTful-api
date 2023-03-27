@@ -61,7 +61,7 @@ class BreedItem(Resource):
     """
         Used to access specific breeds from the database.
     """
-    def get(self, breed):
+    def get(self, breed, group):
         """
             GETs a specific breed
         """

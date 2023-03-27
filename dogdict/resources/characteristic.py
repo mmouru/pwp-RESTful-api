@@ -16,16 +16,37 @@ class CharacteristicCollection(Resource):
     """
         Used to access all the characteristics at once.
     """
-    def get(self):
+    def get(self, group, breed):
         """
             GETs all the characteristics
         """
+        print(breed.name, "NAMEMMEM")
         body = {"items": []}
-        for db_characteristics in Characteristics.query.all():
-            item = db_characteristics.serialize()
+        for db_characteristics in Characteristics.query.join(Characteristics.in_breed).filter_by(name=breed.name):
+            item = db_characteristics.serialize(short_form=True)
             body["items"].append(item)
         print(body["items"])
         return Response(json.dumps(body), 200, mimetype=JSON)
+    
+    def put(self, group, breed):
+        """
+            Change characteristics of one breed from given url
+            put "/api/terrier/australian_terrier/charateristics/
+        """
+        if not request.is_json:
+            raise UnsupportedMediaType
+        try:
+            validate(request.json, Characteristics.json_schema_for_put())
+        except ValidationError as exc:
+            raise BadRequest(description=str(exc)) from exc
+        
+        for characteristics in Characteristics.query.join(Characteristics.in_breed).filter_by(name=breed.name):
+            print(characteristics, "MARTTI SEKOAA")
+        characteristics.deserialize(request.json)
+        print(characteristics.serialize)
+        db.session.add(characteristics)
+        db.session.commit()
+
 
     def post(self):
         """
