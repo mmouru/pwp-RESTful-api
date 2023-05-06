@@ -32,6 +32,7 @@ To install required external libraries and dependencies, use the following comma
   
 
 ```
+git clone https://github.com/mmouru/pwp-RESTful-api.git
 
 cd pwp-RESTful-api
 
@@ -47,7 +48,7 @@ To do this we recommend setting the env variable FLASK_APP to dogdict as (Linux/
 
   
 
-NOTE: Please make sure you do not already have an existing [test.db](https://github.com/mmouru/pwp-RESTful-api/blob/master/db/instance/test.db) file. It needs to be removed before creating a new one.
+NOTE: Please make sure you do not already have an existing [test.db](https://github.com/mmouru/pwp-RESTful-api/blob/master/db/instance/test.db) file. It needs to be removed before creating a new one. Otherwise there will be duplication issues.
 
   
 
@@ -69,9 +70,16 @@ cd instance
 
 ```
 
-  
-
 To view the contents of the database, a VSCode extension such as [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer) can be used.
+
+Running the API and UI manually:
+(make sure to have set FLASK_APP that was done before, also make sure youre in the root folder)
+```
+flask --app dogdict run
+flask --app dogdict --debug run
+
+python ui.py
+```
 
   
 
@@ -110,7 +118,7 @@ CircleCI also releases the containerized app to AWS cloud for further usage if n
 
   
 
-## Running with docker
+## Running the API with docker
 
 You can build and run the app using docker for easier integration.
 
