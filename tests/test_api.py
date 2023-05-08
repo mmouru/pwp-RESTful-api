@@ -354,7 +354,7 @@ def test_characteristics_post(app):
     """ 
     with app.app_context():
         client = app.test_client()
-        breed = _breed(group=True,name="First Good Boy")
+        breed = _breed(group=True,name="first good boy")
 
         good_body = {
             "life_span": 6, # Not nullable
@@ -370,7 +370,7 @@ def test_characteristics_post_exercise(app):
     """
     with app.app_context():
         client = app.test_client()
-        breed = _breed(group=True,name="First Good Boy")
+        breed = _breed(group=True,name="first good boy")
 
         good_body = {
             "life_span": 6, # Not nullable
@@ -387,7 +387,7 @@ def test_characteristics_post_exercise_and_coatlength(app):
     """
     with app.app_context():
         client = app.test_client()
-        breed = _breed(group=True, name="First Good Boy")
+        breed = _breed(group=True, name="first good boy")
 
         good_body = {
             "life_span": 6, # Not nullable
@@ -487,7 +487,7 @@ def test_post_characteristics_duplicate(app):
     """
     Test that POSTs characteristics twice to a breed, resulting in error 409 (1 to 1 relationship)
     """
-    breed_name = "Fun Fun Breed Name"
+    breed_name = "fun fun breed name"
     body = {
     "in_breed": breed_name,
     "char_id": 1,
@@ -497,10 +497,10 @@ def test_post_characteristics_duplicate(app):
     }
     with app.app_context():
         client = app.test_client()
-        _breed(group=True, name="Fun Fun Breed Name")
-        res = client.post(f"/api/groups/{group_url}/breeds/Fun%20Fun%20breed%20name/characteristics/", json=body)
+        _breed(group=True, name="fun fun breed name")
+        res = client.post(f"/api/groups/{group_url}/breeds/fun%20fun%20breed%20name/characteristics/", json=body)
         assert res.status_code == 201
-        res = client.post(f"/api/groups/{group_url}/breeds/Fun%20Fun%20breed%20name/characteristics/", json=body)
+        res = client.post(f"/api/groups/{group_url}/breeds/fun%20fun%20breed%20name/characteristics/", json=body)
         assert res.status_code == 409
         
 
@@ -510,14 +510,14 @@ def test_group_item_get(app):
     """
     with app.app_context():
         client = app.test_client()
-        _group(name="Marttionparas")
+        _group(name="marttionparas")
 
         res = client.get("/api/groups/marttionparas/")
         data = res.data.decode("utf-8")
         print(res)
         data = json.loads(data)
         print(data["items"])
-        assert data["items"] == [{'name': 'Marttionparas', 'breeds': []}]
+        assert data["items"] == [{'name': 'marttionparas', 'breeds': []}]
     
 def test_group_put_validation(app):
     """
@@ -525,7 +525,7 @@ def test_group_put_validation(app):
     """
     with app.app_context():
         client = app.test_client()
-        _group(name="Testgroup123")
+        _group(name="testgroup123")
         res = client.put("/api/groups/testgroup123/", json={"not_valid": "attribute"})
         assert res.status_code == 400
 
@@ -542,7 +542,7 @@ def test_get_breed(app):
         data = res.data.decode("utf-8")
         data = json.loads(data)
         print(data)
-        assert data == {'items': [{'name': 'Majestic Test Breed', 'id': 1, 'group': {'name': 'Testgroup', 'id': 1}, 'facts': [], '@controls': {'self': {'href': '/api/groups/Testgroup/breeds/Majestic%20Test%20Breed/'}}}], '@namespaces': {'breeds': {'name': '/api/groups/Testgroup/breeds/Majestic%20Test%20Breed/'}}, '@controls': {'self': {'href': '/api/groups/Testgroup/breeds/Majestic%20Test%20Breed/'}, 'edit': {'method': 'PUT', 'encoding': 'json', 'title': 'breed:edit', 'schema': {'type': 'object', 'required': ['name'], 'properties': {'name': {'description': 'Breeds unique name', 'type': 'string'}}}, 'href': '/api/groups/Testgroup/breeds/Majestic%20Test%20Breed/'}, 'breed:delete': {'method': 'DELETE', 'href': '/api/groups/Testgroup/breeds/Majestic%20Test%20Breed/'}}}
+        assert data == {'items': [{'name': 'majestic test breed', 'id': 1, 'group': {'name': 'testgroup', 'id': 1}, 'facts': [], '@controls': {'self': {'href': '/api/groups/testgroup/breeds/majestic%20test%20breed/'}}}], '@namespaces': {'breeds': {'name': '/api/groups/testgroup/breeds/majestic%20test%20breed/'}}, '@controls': {'self': {'href': '/api/groups/testgroup/breeds/majestic%20test%20breed/'}, 'edit': {'method': 'PUT', 'encoding': 'json', 'title': 'breed:edit', 'schema': {'type': 'object', 'required': ['name'], 'properties': {'name': {'description': 'Breeds unique name', 'type': 'string'}}}, 'href': '/api/groups/testgroup/breeds/majestic%20test%20breed/'}, 'breed:delete': {'method': 'DELETE', 'href': '/api/groups/testgroup/breeds/majestic%20test%20breed/'}}}
 
 def test_put_breed(app):
     """
