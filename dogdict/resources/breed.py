@@ -206,7 +206,7 @@ class BreedItem(Resource):
             },
         )
 
-    def delete(self, breed):
+    def delete(self, breed, group):
         """
         DELETEs one single breed.
         """

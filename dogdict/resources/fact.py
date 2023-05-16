@@ -173,7 +173,7 @@ class FactItem(Resource):
         body["items"] = fact.fact
         return Response(json.dumps(body), 200, mimetype=JSON)
 
-    def put(self, fact):
+    def put(self, group, breed, fact):
         """
         Used to change a singular fact item  with PUT
         """
