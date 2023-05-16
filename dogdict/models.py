@@ -116,10 +116,6 @@ class Characteristics(db.Model):
         """
         schema = {"type": "object", "required": ["life_span"]}
         props = schema["properties"] = {}
-        """props["in_breed"] = {
-            "description": "Breed that the characteristics describe",
-            "type": "string",
-        }"""
         props["life_span"] = {"description": "Lifespan of a breed", "type": "number"}
         return schema
 

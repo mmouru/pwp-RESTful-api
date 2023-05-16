@@ -21,6 +21,9 @@ class FactBuilder(MasonBuilder):
     """
 
     def add_control_all_facts(self, group, breed):
+        """
+        adds control to all facts methods
+        """
         uri_name = check_for_space(breed)
         self.add_control(
             "facts:facts-all",
@@ -30,6 +33,9 @@ class FactBuilder(MasonBuilder):
         )
 
     def add_control_add_facts(self, group, breed):
+        """
+        adds control to facts add method (post)
+        """
         uri_name = check_for_space(breed)
         self.add_control_post(
             "facts:add-fact",
@@ -39,6 +45,9 @@ class FactBuilder(MasonBuilder):
         )
 
     def add_control_delete_facts(self, fact_id, breed, group):
+        """
+        adds control to facts DELETE method
+        """
         uri_name = check_for_space(breed)
         print("this is add control delete fact:", fact_id, breed, group)
         self.add_control(
@@ -48,6 +57,9 @@ class FactBuilder(MasonBuilder):
         )
 
     def add_control_edit_facts(self, fact_id, breed, group):
+        """
+        adds control to facts PUT method
+        """
         uri_name = check_for_space(breed)
         self.add_control_put(
             "fact:edit",
@@ -116,10 +128,6 @@ class FactCollection(Resource):
 
         db.session.add(fact)
         db.session.commit()
-        """
-        More information about url_for comment in course lovelace 
-        https://lovelace.oulu.fi/ohjelmoitava-web/ohjelmoitava-web/flask-api-project-layout/#avoiding-circular-imports
-        """
 
         uri_id = fact.id
 
@@ -142,6 +150,9 @@ class FactItem(Resource):
     """
 
     def get(self, group, breed, fact):
+        """
+        Used to access a singular fact item  with GET
+        """
         body = FactBuilder(items=[])
     
         uri_name = check_for_space(breed.name)
@@ -163,6 +174,9 @@ class FactItem(Resource):
         return Response(json.dumps(body), 200, mimetype=JSON)
 
     def put(self, group, breed, fact):
+        """
+        Used to change a singular fact item  with PUT
+        """
         if not request.is_json:
             raise UnsupportedMediaType
         try:
