@@ -11,9 +11,7 @@
 
 * Student 2. Kalle Veijalainen kveijala19@student.oulu.fi
 
-* Student 3. Juho Kurula jkurula19@student.oulu.fi
-
-* Student 4. Lauri Suutari lsuutari19@student.oulu.fi
+* Student 3. Lauri Suutari lsuutari19@student.oulu.fi
 
   
 
