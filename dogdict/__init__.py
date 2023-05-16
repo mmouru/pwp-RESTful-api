@@ -3,7 +3,7 @@
 """
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flasgger import Swagger, swag_from
+from flasgger import Swagger
 
 # Create a SQL database
 db = SQLAlchemy()

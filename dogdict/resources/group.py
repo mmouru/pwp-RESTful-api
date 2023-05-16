@@ -21,6 +21,9 @@ class GroupBuilder(MasonBuilder):
     """
 
     def add_control_all_groups(self):
+        """
+            Used to add control to all groups methods
+        """
         self.add_control(
             "groups:groups-all",
             url_for("api.groupcollection"),
@@ -29,6 +32,9 @@ class GroupBuilder(MasonBuilder):
         )
 
     def add_control_add_groups(self):
+        """
+            Used to add control to all groups add method
+        """
         self.add_control_post(
             "groups:add-group",
             "Add a new group",
@@ -37,6 +43,9 @@ class GroupBuilder(MasonBuilder):
         )
 
     def add_control_edit_groups(self, group_name):
+        """
+            Used to add control to all groups aput method
+        """
         self.add_control_put(
             "group:edit",
             url_for("api.groupitem", group=group_name),
@@ -77,7 +86,7 @@ class GroupCollection(Resource):
             body["items"].append(item)
 
         return Response(json.dumps(body), 200, mimetype=JSON)
-    
+
     def post(self):
         """
         Used to POST a new Group object and validate it against the Group

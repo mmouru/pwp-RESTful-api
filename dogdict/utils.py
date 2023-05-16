@@ -5,10 +5,11 @@ for development
 
 from werkzeug.exceptions import NotFound, BadRequest
 from werkzeug.routing import BaseConverter
-from dogdict.models import Breed, Facts, Group, Characteristics
-from dogdict import db
 import click
 from flask.cli import with_appcontext
+from dogdict.models import Breed, Facts, Group, Characteristics
+from dogdict import db
+
 
 def breed_name_from_url(url_value):
     """
@@ -31,7 +32,7 @@ def check_for_space(name):
                     Only letters and 'space' allowed."
             )
         name = name.replace(" ", "%20")
-    
+
     return name
 
 

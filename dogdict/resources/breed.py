@@ -11,8 +11,7 @@ from flask_restful import Resource
 from dogdict.models import Breed, Characteristics, Group, Facts, db
 from dogdict.constants import JSON
 from dogdict.utils import check_for_space
-from flasgger import Swagger, swag_from
-from flasgger.utils import swag_from
+from flasgger import Swagger
 from dogdict.resources.mason import MasonBuilder
 
 
@@ -23,6 +22,9 @@ class BreedBuilder(MasonBuilder):
     """
 
     def add_control_all_breeds(self, group):
+        """
+        Adds control to all methods related to breed
+        """
         self.add_control(
             "breeds:breeds-all",
             url_for("api.breedcollection", group=group.name),
@@ -31,6 +33,9 @@ class BreedBuilder(MasonBuilder):
         )
 
     def add_control_delete_breed(self, breed, group):
+        """
+        Adds control to breed delete method
+        """
         uri_name = check_for_space(breed)
         self.add_control(
             "breed:delete",
@@ -39,6 +44,9 @@ class BreedBuilder(MasonBuilder):
         )
 
     def add_control_add_breeds(self, group):
+        """
+        Adds control to breed post method
+        """
         self.add_control_post(
             "breeds:add-breed",
             "Add a new breed and connects it to an existing group",
@@ -47,6 +55,9 @@ class BreedBuilder(MasonBuilder):
         )
 
     def add_control_edit_breed(self, breed, group):
+        """
+        Adds control to breed put method
+        """
         uri_name = check_for_space(breed)
         self.add_control_put(
             "breed:edit",
@@ -195,7 +206,7 @@ class BreedItem(Resource):
             },
         )
 
-    def delete(self, breed, group):
+    def delete(self, breed):
         """
         DELETEs one single breed.
         """
